@@ -8,15 +8,31 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 const scene = new THREE.Scene()
 
 //texture for planets
-const texture = new THREE.TextureLoader().load('8k_sun.jpg')
+const suntexture = new THREE.TextureLoader().load('8k_sun.jpg')
 
 //make sun
 const sungeo = new THREE.SphereGeometry(3, 32, 32)
 const material = new THREE.MeshStandardMaterial({
-  map: texture
+  map: suntexture
 })
-const mesh = new THREE.Mesh(sungeo, material)
-scene.add(mesh)
+const sunmesh = new THREE.Mesh(sungeo, material)
+scene.add(sunmesh)
+
+//make random stars
+const starsGeometry = new THREE.BufferGeometry();
+const starsMaterial = new THREE.PointsMaterial({ color: 0xFFFFFF, size: 0.1 });
+
+const starsVertices = [];
+for (let i = 0; i < 1000; i++) {
+  const x = (Math.random() - 0.5) * 2000;
+  const y = (Math.random() - 0.5) * 2000;
+  const z = (Math.random() - 0.5) * 2000;
+  starsVertices.push(x, y, z);
+}
+
+starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+const stars = new THREE.Points(starsGeometry, starsMaterial);
+scene.add(stars);
 
 //sizes of webpage
 const sizes = {
@@ -26,12 +42,15 @@ const sizes = {
 
 
 //lights
-const light = new THREE.PointLight(0xffffff, 10, 100)
-light.position.set(0, 10, 10)
-scene.add(light)
+const alight = new THREE.AmbientLight(0xffffff, 0.5)
+scene.add(alight)
+
+const dlight = new THREE.DirectionalLight(0xffffff, 10)
+dlight.position.set(5, 2, 5)
+scene.add(dlight)
 
 //camera
-const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(100, sizes.width / sizes.height, 0.1, 1000)
 camera.position.z = 20
 scene.add(camera)
 
@@ -46,7 +65,7 @@ renderer.render(scene, camera)
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
 controls.autoRotate = true
-controls.autoRotateSpeed = 7
+controls.autoRotateSpeed = 3
 
 //resize window
 window.addEventListener("resize", () => {

@@ -19,7 +19,7 @@ body, html{
 
 nav {
   color: white;
-  background-color: rgb(1, 1, 38);
+  background: linear-gradient(to bottom, rgb(1, 1, 38), blue);
   z-index: 2;
   position: relative;
   display: flex;
