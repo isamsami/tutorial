@@ -9,14 +9,24 @@ const scene = new THREE.Scene()
 
 //texture for planets
 const suntexture = new THREE.TextureLoader().load('8k_sun.jpg')
+const mertexture = new THREE.TextureLoader().load('8k_mercury.jpg')
 
 //make sun
-const sungeo = new THREE.SphereGeometry(3, 32, 32)
-const material = new THREE.MeshStandardMaterial({
+const sungeo = new THREE.SphereGeometry(15, 32, 32)
+const sunmaterial = new THREE.MeshStandardMaterial({
   map: suntexture
 })
-const sunmesh = new THREE.Mesh(sungeo, material)
-scene.add(sunmesh)
+const sun = new THREE.Mesh(sungeo, sunmaterial)
+scene.add(sun)
+
+//make mercury
+const mergeo = new THREE.SphereGeometry(1, 32, 32)
+const mermaterial = new THREE.MeshBasicMaterial({
+  map: mertexture
+})
+const mercury = new THREE.Mesh(mergeo, mermaterial)
+mercury.position.x = 17;
+scene.add(mercury)
 
 //make random stars
 const starsGeometry = new THREE.BufferGeometry();
@@ -51,7 +61,7 @@ scene.add(dlight)
 
 //camera
 const camera = new THREE.PerspectiveCamera(100, sizes.width / sizes.height, 0.1, 1000)
-camera.position.z = 20
+camera.position.z = 100
 scene.add(camera)
 
 
@@ -64,8 +74,6 @@ renderer.render(scene, camera)
 //controls
 const controls = new OrbitControls(camera, canvas)
 controls.enableDamping = true
-controls.autoRotate = true
-controls.autoRotateSpeed = 3
 
 //resize window
 window.addEventListener("resize", () => {
